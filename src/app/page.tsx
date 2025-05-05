@@ -4,7 +4,7 @@ export default async function Home() {
 
   // 1. Fetch first 10 posts
   const postResponse = await fetch(
-    "https://jsonplaceholder.typicode.com/posts?_limit=10&_time=" + dt
+    "https://jsonplaceholder.typicode.com/posts?_limit=100&_time=" + dt
   );
   const posts = await postResponse.json();
 
@@ -42,6 +42,7 @@ export default async function Home() {
               <p className="text-sm text-gray-600">
                 By: {user ? user.name : "Unknown User"}
               </p>
+              <p>{post.body}</p>
               {/* Optionally display post body:
               <p className="mt-2 text-gray-800">{post.body}</p>
               */}
