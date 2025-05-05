@@ -1,7 +1,10 @@
 export default async function Home() {
+  const dt = new Date().getTime();
+  console.log("Server-side rendering at: ", dt);
+
   // 1. Fetch first 10 posts
   const postResponse = await fetch(
-    "https://jsonplaceholder.typicode.com/posts?_limit=10"
+    "https://jsonplaceholder.typicode.com/posts?_limit=10&_time=" + dt
   );
   const posts = await postResponse.json();
 
@@ -10,9 +13,9 @@ export default async function Home() {
 
   // 3. Create fetch promises for each unique user
   const userPromises = userIds.map((userId) =>
-    fetch(`https://jsonplaceholder.typicode.com/users/${userId}`).then((res) =>
-      res.json()
-    )
+    fetch(
+      `https://jsonplaceholder.typicode.com/users/${userId}?_time=${dt}`
+    ).then((res) => res.json())
   );
 
   // 4. Fetch required users concurrently
@@ -27,6 +30,9 @@ export default async function Home() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Latest Posts</h1>
+      <small>
+        Server-side rendering at: {new Date().toLocaleString()}: {dt}
+      </small>
       <div className="divide-y divide-gray-200">
         {posts.map((post: any) => {
           const user = userMap[post.userId]; // Find the user for the post
